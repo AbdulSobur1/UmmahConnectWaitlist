@@ -44,6 +44,7 @@ export default function SuccessView({ message, count, onBack }: SuccessViewProps
   }, [count]);
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || (typeof window !== "undefined" ? window.location.href : "");
+  const othersCount = Math.max(displayCount - 1, 0);
 
   async function shareWhatsApp() {
     const text = buildShareText(appUrl);
@@ -92,9 +93,19 @@ export default function SuccessView({ message, count, onBack }: SuccessViewProps
       </p>
 
       <div className={styles.successCount}>
-        You joined <strong>{displayCount}</strong> others
-        <br />
-        on the founding list.
+        {count <= 1 ? (
+          <>
+            You&apos;re the first
+            <br />
+            on the founding list.
+          </>
+        ) : (
+          <>
+            You joined <strong>{othersCount}</strong> {othersCount === 1 ? "other" : "others"}
+            <br />
+            on the founding list.
+          </>
+        )}
       </div>
 
       <div className={styles.divider} />
