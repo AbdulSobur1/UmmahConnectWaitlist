@@ -1,64 +1,26 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import styles from "./LoadingScreen.module.css";
+type LoadingScreenProps = {
+  isFading: boolean;
+};
 
-type LoadingState = "hidden" | "visible" | "exiting";
-
-export default function LoadingScreen() {
-  const [state, setState] = useState<LoadingState>("hidden");
-
-  useEffect(() => {
-    if (sessionStorage.getItem("uc_loaded") === "true") {
-      window.dispatchEvent(new CustomEvent("uc-loading-complete"));
-      return;
-    }
-
-    let exitTimer: ReturnType<typeof setTimeout>;
-    let hideTimer: ReturnType<typeof setTimeout>;
-    setState("visible");
-
-    exitTimer = setTimeout(() => {
-      setState("exiting");
-      sessionStorage.setItem("uc_loaded", "true");
-      window.setTimeout(() => {
-        window.dispatchEvent(new CustomEvent("uc-loading-exiting"));
-      }, 300);
-
-      hideTimer = setTimeout(() => {
-        setState("hidden");
-        window.dispatchEvent(new CustomEvent("uc-loading-complete"));
-      }, 400);
-    }, 2200);
-
-    return () => {
-      clearTimeout(exitTimer);
-      clearTimeout(hideTimer);
-    };
-  }, []);
-
-  if (state === "hidden") {
-    return null;
-  }
-
+export default function LoadingScreen({ isFading }: LoadingScreenProps) {
   return (
     <div
-      className={`${styles.loading} ${state === "exiting" ? styles.exiting : ""}`}
+      className={`fixed inset-0 z-50 flex min-h-screen items-center justify-center bg-[#0B0F0E] transition-opacity duration-[600ms] ease-out ${
+        isFading ? "opacity-0" : "opacity-100"
+      }`}
       role="status"
-      aria-label="Loading Ummah Connect"
+      aria-label="Loading UmmahConnect"
     >
-      <div className={styles.bg} />
-      <div className={styles.geo} />
-      <div className={styles.content}>
-        <div className={styles.greeting} lang="ar" dir="rtl" aria-live="polite">
-          السَّلَامُ عَلَيْكُمْ
+      <div className="flex flex-col items-center gap-5 text-center">
+        <div className="font-serif text-3xl font-semibold text-[#F5D78A] sm:text-4xl">
+          Ummah<span className="text-white">Connect</span>
         </div>
-        <div className={styles.transliteration}>Assalamu Alaikum</div>
-        <div className={styles.dots} aria-hidden="true">
-          <span />
-          <span />
-          <span />
+        <div className="animate-pulse text-xl text-white/70" lang="ar" dir="rtl">
+          بسم الله الرحمن الرحيم
         </div>
+        <div className="h-6 w-6 animate-spin rounded-full border-2 border-white/15 border-t-[#F5D78A]" />
       </div>
     </div>
   );
