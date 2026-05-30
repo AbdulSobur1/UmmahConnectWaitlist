@@ -15,6 +15,14 @@ function easeOutCubic(value: number): number {
   return 1 - Math.pow(1 - value, 3);
 }
 
+function openExternal(url: string) {
+  const popup = window.open(url, "_blank", "noopener,noreferrer");
+
+  if (!popup) {
+    window.location.href = url;
+  }
+}
+
 export default function SuccessView({ message, count, onBack }: SuccessViewProps) {
   const [displayCount, setDisplayCount] = useState(Math.max(count - 1, 0));
   const [copyText, setCopyText] = useState("Copy Link");
@@ -46,31 +54,44 @@ export default function SuccessView({ message, count, onBack }: SuccessViewProps
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || (typeof window !== "undefined" ? window.location.href : "");
   const othersCount = Math.max(displayCount - 1, 0);
 
-  async function shareWhatsApp() {
+  function shareWhatsApp() {
     const text = buildShareText(appUrl);
-    if (navigator.share) {
-      await navigator.share({ text, url: appUrl });
-      return;
-    }
-    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank", "noopener,noreferrer");
+    openExternal(`https://wa.me/?text=${encodeURIComponent(text)}`);
   }
 
   async function shareTwitter() {
     const text = buildTwitterText();
+
     if (navigator.share) {
-      await navigator.share({ text, url: appUrl });
-      return;
+      try {
+        await navigator.share({ text, url: appUrl });
+        return;
+      } catch {
+        // Continue to the X share URL if native sharing is unavailable or cancelled.
+      }
     }
-    window.open(
-      `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(appUrl)}`,
-      "_blank",
-      "noopener,noreferrer",
-    );
+
+    openExternal(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(appUrl)}`);
   }
 
   async function copyLink() {
-    await navigator.clipboard.writeText(appUrl);
-    setCopyText("Copied!");
+    try {
+      await navigator.clipboard.writeText(appUrl);
+      setCopyText("Copied!");
+    } catch {
+      const input = document.createElement("textarea");
+      input.value = appUrl;
+      input.setAttribute("readonly", "");
+      input.style.position = "fixed";
+      input.style.opacity = "0";
+      document.body.appendChild(input);
+      input.select();
+
+      const didCopy = document.execCommand("copy");
+      document.body.removeChild(input);
+      setCopyText(didCopy ? "Copied!" : "Copy failed");
+    }
+
     window.setTimeout(() => setCopyText("Copy Link"), 2000);
   }
 
