@@ -11,6 +11,7 @@ type AppState = {
   view: "form" | "success";
   currentCount: number;
   successMessage: string;
+  successEmail: string;
 };
 
 type WaitlistResponse = {
@@ -41,6 +42,7 @@ export default function WaitlistPage({
     view: "form",
     currentCount,
     successMessage: "",
+    successEmail: "",
   });
   const [formLeaving, setFormLeaving] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -94,6 +96,7 @@ export default function WaitlistPage({
         setAppState({
           view: "success",
           currentCount: count,
+          successEmail: values.email,
           successMessage: data.message ?? "You're on the list! جزاك الله خيراً",
         });
         setFormLeaving(false);
@@ -133,7 +136,12 @@ export default function WaitlistPage({
       <main className={`${styles.page} ${ready ? styles.pageReady : ""}`}>
         <section className={styles.card} id="mainCard" aria-label="Ummah Connect founding members waitlist">
           {appState.view === "success" ? (
-            <SuccessView message={appState.successMessage} count={appState.currentCount} onBack={handleBack} />
+            <SuccessView
+              count={appState.currentCount}
+              email={appState.successEmail}
+              message={appState.successMessage}
+              onBack={handleBack}
+            />
           ) : isFull ? (
             <div className={styles.formView}>
               <div className={styles.formGreeting} lang="ar" dir="rtl">
