@@ -85,9 +85,9 @@ export default function SuccessView({ member, onBack }: SuccessViewProps) {
       </h2>
 
       <p className={styles.successMessage}>
-        You're on the Ummah Connect waitlist.
+        You&apos;re on the Ummah Connect waitlist.
         <br />
-        We'll notify you the moment we launch in Nigeria.
+        We&apos;ll notify you the moment we launch in Nigeria.
       </p>
 
       <div className={styles.memberMeta}>
@@ -105,8 +105,8 @@ export default function SuccessView({ member, onBack }: SuccessViewProps) {
       <div className={styles.divider} />
 
       <p className={styles.hadith}>
-        "The best of people are those who are most beneficial to people."
-        <cite>- Prophet Muhammad ﷺ</cite>
+        &quot;The best of people are those who are most beneficial to people.&quot;
+        <cite>— Prophet Muhammad ﷺ</cite>
       </p>
 
       <div className={styles.shareRow}>
@@ -125,7 +125,7 @@ export default function SuccessView({ member, onBack }: SuccessViewProps) {
       </div>
 
       <button className={styles.backLink} type="button" onClick={onBack}>
-        &lt;- Back to waitlist
+        ← Back to waitlist
       </button>
 
       <span className={styles.goalNote} aria-hidden="true">{GOAL} founding spots</span>

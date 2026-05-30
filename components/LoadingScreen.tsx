@@ -21,7 +21,9 @@ export default function LoadingScreen() {
     exitTimer = setTimeout(() => {
       setState("exiting");
       sessionStorage.setItem("uc_loaded", "true");
-      window.dispatchEvent(new CustomEvent("uc-loading-exiting"));
+      window.setTimeout(() => {
+        window.dispatchEvent(new CustomEvent("uc-loading-exiting"));
+      }, 300);
 
       hideTimer = setTimeout(() => {
         setState("hidden");

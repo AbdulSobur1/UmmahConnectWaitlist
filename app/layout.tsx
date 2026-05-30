@@ -17,10 +17,10 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Ummah Connect - Founding Members",
+  title: "Ummah Connect — Founding Members",
   description: "Join 40 founding members shaping the career network for Muslims in Nigeria.",
   openGraph: {
-    title: "Ummah Connect - Founding Members",
+    title: "Ummah Connect — Founding Members",
     description: "Join 40 founding members shaping the career network for Muslims in Nigeria.",
     type: "website",
   },

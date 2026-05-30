@@ -107,7 +107,7 @@ export default function WaitlistForm({
         <span>founding members</span>
       </h1>
       <p className={styles.cardSub}>
-        A career network built for Muslims in Nigeria - launching soon. Join the waitlist and be
+        A career network built for Muslims in Nigeria — launching soon. Join the waitlist and be
         first in.
       </p>
 
@@ -199,7 +199,7 @@ export default function WaitlistForm({
         </div>
 
         <button type="submit" className={`${styles.btnSubmit} ${isLoading ? styles.loading : ""}`} disabled={isLoading}>
-          {isLoading ? "Joining..." : "Reserve My Spot ->"}
+          {isLoading ? "Joining..." : "Reserve My Spot →"}
         </button>
       </form>
 

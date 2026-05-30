@@ -17,11 +17,11 @@ export function generateRefCode(firstName: string, lastName: string): string {
 }
 
 export function buildShareText(appUrl: string): string {
-  return `I just joined the Ummah Connect waitlist - a career network built for Muslims in Nigeria\n\nOnly 40 founding spots. Join me: ${appUrl}`;
+  return `I just joined the Ummah Connect waitlist — a career network built for Muslims in Nigeria 🌙\n\nOnly 40 founding spots. Join me: ${appUrl}`;
 }
 
 export function buildTwitterText(): string {
-  return "Just joined the @UmmahConnect waitlist - a career network built for Muslims in Nigeria\n\nOnly 40 founding spots. Find your people. Grow your career. Keep your faith.";
+  return "Just joined the @UmmahConnect waitlist — a career network built for Muslims in Nigeria 🌙\n\nOnly 40 founding spots. Find your people. Grow your career. Keep your faith.";
 }
 
 export function isValidEmail(email: string): boolean {
