@@ -3,6 +3,8 @@ import { CITIES, INDUSTRIES } from "@/lib/constants";
 import { addToWaitlist, getWaitlistCount, isEmailAlreadyRegistered } from "@/src/lib/postgres";
 import { isValidEmail } from "@/lib/utils";
 
+export const runtime = "nodejs";
+
 type WaitlistBody = {
   firstName?: unknown;
   lastName?: unknown;

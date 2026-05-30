@@ -30,6 +30,10 @@ function getPool() {
   if (!globalThis.waitlistPool) {
     globalThis.waitlistPool = new Pool({
       connectionString: getConnectionString(),
+      connectionTimeoutMillis: 5000,
+      idleTimeoutMillis: 10000,
+      max: 1,
+      query_timeout: 5000,
     });
   }
 
