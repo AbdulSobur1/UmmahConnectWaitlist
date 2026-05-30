@@ -20,14 +20,26 @@ type WaitlistResponse = {
   error?: string;
 };
 
+type WaitlistPageProps = {
+  currentCount: number;
+  isCountLoading: boolean;
+  countError: string;
+  onCountChange: (count: number) => void;
+};
+
 async function readJson(response: Response): Promise<WaitlistResponse> {
   return (await response.json()) as WaitlistResponse;
 }
 
-export default function WaitlistPage() {
+export default function WaitlistPage({
+  currentCount,
+  isCountLoading,
+  countError,
+  onCountChange,
+}: WaitlistPageProps) {
   const [appState, setAppState] = useState<AppState>({
     view: "form",
-    currentCount: 0,
+    currentCount,
     successMessage: "",
   });
   const [formLeaving, setFormLeaving] = useState(false);
@@ -38,18 +50,10 @@ export default function WaitlistPage() {
   const transitionTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    const markReady = () => setReady(true);
-
-    if (sessionStorage.getItem("uc_loaded") === "true") {
-      setReady(true);
-    } else {
-      window.addEventListener("uc-loading-exiting", markReady);
-      window.addEventListener("uc-loading-complete", markReady);
-    }
+    const readyTimer = window.setTimeout(() => setReady(true), 150);
 
     return () => {
-      window.removeEventListener("uc-loading-exiting", markReady);
-      window.removeEventListener("uc-loading-complete", markReady);
+      clearTimeout(readyTimer);
       if (transitionTimer.current) {
         clearTimeout(transitionTimer.current);
       }
@@ -57,32 +61,12 @@ export default function WaitlistPage() {
   }, []);
 
   useEffect(() => {
-    let ignore = false;
+    setAppState((current) => ({ ...current, currentCount }));
+  }, [currentCount]);
 
-    async function loadCount() {
-      try {
-        const response = await fetch("/api/waitlist", { method: "GET", cache: "no-store" });
-        const data = await readJson(response);
-
-        if (!ignore && response.ok && typeof data.count === "number") {
-          const count = data.count;
-          setAppState((current) => ({ ...current, currentCount: count }));
-        } else if (!ignore) {
-          setFormError(data.error ?? "Unable to load the live waitlist count.");
-        }
-      } catch {
-        if (!ignore) {
-          setFormError("Unable to connect to the waitlist. Please try again.");
-        }
-      }
-    }
-
-    loadCount();
-
-    return () => {
-      ignore = true;
-    };
-  }, []);
+  useEffect(() => {
+    setFormError(countError);
+  }, [countError]);
 
   async function handleSubmit(values: WaitlistFormValues): Promise<boolean> {
     setIsSubmitting(true);
@@ -104,6 +88,7 @@ export default function WaitlistPage() {
       }
 
       const count = typeof data.count === "number" ? data.count : appState.currentCount;
+      onCountChange(count);
       setFormLeaving(true);
       transitionTimer.current = setTimeout(() => {
         setAppState({
@@ -162,11 +147,17 @@ export default function WaitlistPage() {
               <p className={styles.cardSub}>
                 The first 40 founding member spots have been reserved. Thank you for the support.
               </p>
-              <ProgressBar current={appState.currentCount} goal={GOAL} milestoneLabels={MILESTONE_LABELS} />
+              <ProgressBar
+                current={appState.currentCount}
+                goal={GOAL}
+                isLoading={isCountLoading}
+                milestoneLabels={MILESTONE_LABELS}
+              />
             </div>
           ) : (
             <WaitlistForm
               currentCount={appState.currentCount}
+              isCountLoading={isCountLoading}
               isLeaving={formLeaving}
               isLoading={isSubmitting}
               errorMessage={formError}

@@ -18,6 +18,7 @@ type FormErrors = Partial<Record<keyof WaitlistFormValues, string>>;
 
 type WaitlistFormProps = {
   currentCount: number;
+  isCountLoading: boolean;
   isLeaving: boolean;
   isLoading: boolean;
   errorMessage: string;
@@ -51,6 +52,7 @@ function validate(values: WaitlistFormValues): FormErrors {
 
 export default function WaitlistForm({
   currentCount,
+  isCountLoading,
   isLeaving,
   isLoading,
   errorMessage,
@@ -98,7 +100,12 @@ export default function WaitlistForm({
         first in.
       </p>
 
-      <ProgressBar current={currentCount} goal={GOAL} milestoneLabels={MILESTONE_LABELS} />
+      <ProgressBar
+        current={currentCount}
+        goal={GOAL}
+        isLoading={isCountLoading}
+        milestoneLabels={MILESTONE_LABELS}
+      />
       {spotsLeft <= 10 && spotsLeft > 0 ? (
         <p className={styles.spotsWarning}>Only {spotsLeft} spots remaining</p>
       ) : null}

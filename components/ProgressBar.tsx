@@ -8,6 +8,7 @@ type MilestoneLabels = Record<number, string>;
 type ProgressBarProps = {
   current: number;
   goal: number;
+  isLoading?: boolean;
   milestoneLabels: MilestoneLabels;
 };
 
@@ -22,7 +23,7 @@ function getMilestone(current: number, milestoneLabels: MilestoneLabels): string
     .sort((a, b) => b.threshold - a.threshold)[0]?.label ?? "";
 }
 
-export default function ProgressBar({ current, goal, milestoneLabels }: ProgressBarProps) {
+export default function ProgressBar({ current, goal, isLoading = false, milestoneLabels }: ProgressBarProps) {
   const [displayCount, setDisplayCount] = useState(0);
   const rafRef = useRef<number | null>(null);
 
@@ -56,7 +57,7 @@ export default function ProgressBar({ current, goal, milestoneLabels }: Progress
     <div className={styles.counterBar}>
       <div className={styles.counterTop}>
         <span className={styles.counterLabel}>Founding members so far</span>
-        <span className={styles.counterNum}>
+        <span className={`${styles.counterNum} ${isLoading ? styles.counterNumLoading : ""}`}>
           {displayCount} <span>/ {goal}</span>
         </span>
       </div>
