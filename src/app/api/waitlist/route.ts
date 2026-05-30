@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { CITIES, INDUSTRIES } from "@/lib/constants";
-import { addToWaitlist, getWaitlistCount, isEmailAlreadyRegistered } from "@/src/lib/supabase";
+import { addToWaitlist, getWaitlistCount, isEmailAlreadyRegistered } from "@/src/lib/airtable";
 import { isValidEmail } from "@/lib/utils";
 
 type WaitlistBody = {
