@@ -65,7 +65,8 @@ export default function WaitlistPage() {
         const data = await readJson(response);
 
         if (!ignore && response.ok && typeof data.count === "number") {
-          setAppState((current) => ({ ...current, currentCount: data.count }));
+          const count = data.count;
+          setAppState((current) => ({ ...current, currentCount: count }));
         } else if (!ignore) {
           setFormError(data.error ?? "Unable to load the live waitlist count.");
         }
