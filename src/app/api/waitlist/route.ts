@@ -26,7 +26,8 @@ export async function GET() {
   try {
     const count = await getWaitlistCount();
     return NextResponse.json({ count }, { status: 200 });
-  } catch {
+  } catch (error) {
+    console.error("Failed to load waitlist count:", error);
     return jsonError("Unable to load waitlist count.", 500);
   }
 }
@@ -79,7 +80,8 @@ export async function POST(request: Request) {
       },
       { status: 201 },
     );
-  } catch {
+  } catch (error) {
+    console.error("Failed to join waitlist:", error);
     return jsonError("Unable to join the waitlist right now. Please try again.", 500);
   }
 }

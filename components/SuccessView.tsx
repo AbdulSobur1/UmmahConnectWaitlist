@@ -88,7 +88,7 @@ export default function SuccessView({ message, count, onBack }: SuccessViewProps
       <p className={styles.successMessage}>
         {message}
         <br />
-        We&apos;ll notify you the moment we launch in Nigeria.
+        We&apos;ll notify you the moment we launch.
       </p>
 
       <div className={styles.successCount}>

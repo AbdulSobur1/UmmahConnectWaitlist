@@ -10,14 +10,14 @@ export const COLORS = {
 
 export const CITIES = [
   "Lagos",
+  "London",
+  "Dubai",
+  "Toronto",
+  "New York",
+  "Kuala Lumpur",
+  "Istanbul",
+  "Jakarta",
   "Abuja",
-  "Kano",
-  "Kaduna",
-  "Port Harcourt",
-  "Ibadan",
-  "Maiduguri",
-  "Sokoto",
-  "Zaria",
   "Other",
 ] as const;
 
@@ -35,7 +35,7 @@ export const INDUSTRIES = [
   "Other",
 ] as const;
 
-export const SOCIAL_CITIES = ["Lagos", "Abuja", "Kano", "+7 cities"] as const;
+export const SOCIAL_CITIES = ["Lagos", "London", "Dubai", "+7 cities"] as const;
 
 export const MILESTONE_LABELS = {
   10: "25% claimed - spots going fast",

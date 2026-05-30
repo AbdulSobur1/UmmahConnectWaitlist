@@ -96,8 +96,7 @@ export default function WaitlistForm({
         <span>founding members</span>
       </h1>
       <p className={styles.cardSub}>
-        A career network built for Muslims in Nigeria — launching soon. Join the waitlist and be
-        first in.
+        A global career network built for Muslims - launching soon. Join the waitlist and be first in.
       </p>
 
       <ProgressBar

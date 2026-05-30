@@ -18,10 +18,10 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   title: "Ummah Connect — Founding Members",
-  description: "Join 40 founding members shaping the career network for Muslims in Nigeria.",
+  description: "Join 40 founding members shaping a global career network for Muslims.",
   openGraph: {
     title: "Ummah Connect — Founding Members",
-    description: "Join 40 founding members shaping the career network for Muslims in Nigeria.",
+    description: "Join 40 founding members shaping a global career network for Muslims.",
     type: "website",
   },
 };
@@ -34,7 +34,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ar-NG" className={`${playfair.variable} ${dmSans.variable}`}>
+    <html lang="en" className={`${playfair.variable} ${dmSans.variable}`}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
       </head>
