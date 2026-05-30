@@ -1,0 +1,44 @@
+:root {
+  --teal: #1A6B5C;
+  --teal-mid: #2D8B78;
+  --teal-light: #E8F5F2;
+  --gold: #C9A84C;
+  --gold-light: rgba(201,168,76,0.15);
+  --dark: #0D1B1E;
+  --dark2: #132420;
+  --success: #5ECDB5;
+  --muted: rgba(255,255,255,0.45);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  min-height: 100%;
+  background: var(--dark);
+}
+
+body {
+  min-height: 100vh;
+  background: var(--dark);
+  color: #fff;
+  overflow-x: hidden;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  min-height: 44px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}

@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ummah Connect — Join the Waitlist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #1A6B5C;
+    --teal-mid: #2D8B78;
+    --teal-light: #E8F5F2;
+    --gold: #C9A84C;
+    --gold-light: rgba(201,168,76,0.15);
+    --dark: #0D1B1E;
+    --dark2: #132420;
+    --success: #5ECDB5;
+    --muted: rgba(255,255,255,0.45);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--dark);
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+  }
+
+  /* ── BACKGROUND ── */
+  .bg {
+    position: fixed; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 60% 60% at 20% 20%, rgba(26,107,92,0.22) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 80% 80%, rgba(201,168,76,0.1) 0%, transparent 55%),
+      radial-gradient(ellipse 40% 40% at 70% 20%, rgba(26,107,92,0.12) 0%, transparent 50%),
+      var(--dark);
+  }
+  .bg-geo {
+    position: fixed; inset: 0; z-index: 0; opacity: 0.025;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(255,255,255,1) 59px, rgba(255,255,255,1) 60px),
+      repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(255,255,255,1) 59px, rgba(255,255,255,1) 60px);
+  }
+
+  /* ── LAYOUT ── */
+  .page {
+    position: relative; z-index: 1;
+    display: flex; flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+
+  /* ── NAV ── */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 18px 32px;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(13,27,30,0.7); backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+  }
+  .logo { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 900; }
+  .logo span { color: var(--gold); }
+  .nav-badge {
+    background: var(--gold-light); border: 1px solid rgba(201,168,76,0.3);
+    color: var(--gold); padding: 6px 14px; border-radius: 100px;
+    font-size: 12px; font-weight: 600;
+  }
+
+  /* ── MAIN CARD ── */
+  .card {
+    width: 100%; max-width: 520px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 28px;
+    padding: 52px 44px;
+    backdrop-filter: blur(20px);
+    animation: cardIn 0.7s cubic-bezier(0.22,1,0.36,1) both;
+    margin-top: 60px;
+  }
+
+  /* ── FORM STATE ── */
+  .form-view, .success-view { display: flex; flex-direction: column; align-items: center; }
+  .success-view { display: none; }
+
+  /* crescent icon */
+  .crescent {
+    font-size: 48px; margin-bottom: 20px;
+    animation: float 4s ease-in-out infinite;
+    display: block; text-align: center;
+  }
+
+  /* heading */
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px; font-weight: 900;
+    text-align: center; line-height: 1.1;
+    margin-bottom: 12px;
+  }
+  .card-title span { color: var(--gold); }
+
+  .card-sub {
+    text-align: center; font-size: 15px;
+    color: var(--muted); font-weight: 300;
+    line-height: 1.7; margin-bottom: 32px;
+    max-width: 360px;
+  }
+
+  /* counter */
+  .counter-bar {
+    width: 100%; margin-bottom: 32px;
+  }
+  .counter-top {
+    display: flex; justify-content: space-between;
+    align-items: center; margin-bottom: 10px;
+  }
+  .counter-label { font-size: 13px; color: var(--muted); }
+  .counter-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 900; color: var(--gold);
+  }
+  .counter-num span { font-size: 13px; font-family: 'DM Sans', sans-serif; font-weight: 400; color: var(--muted); }
+  .progress-track {
+    width: 100%; height: 6px; background: rgba(255,255,255,0.08);
+    border-radius: 100px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; border-radius: 100px;
+    background: linear-gradient(90deg, var(--teal), var(--gold));
+    width: 0%;
+    transition: width 1.2s cubic-bezier(0.22,1,0.36,1);
+  }
+  .milestone-label {
+    font-size: 11px; color: var(--success);
+    margin-top: 7px; font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  /* form */
+  .form { width: 100%; display: flex; flex-direction: column; gap: 12px; }
+
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: 0.5px; text-transform: uppercase; }
+
+  input, select {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px; padding: 13px 16px;
+    color: #fff; font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 400;
+    outline: none; transition: border-color 0.2s, background 0.2s;
+    width: 100%;
+  }
+  input::placeholder { color: rgba(255,255,255,0.28); }
+  input:focus, select:focus {
+    border-color: var(--teal);
+    background: rgba(26,107,92,0.1);
+  }
+  select option { background: #1A2B2E; color: #fff; }
+
+  .btn-submit {
+    width: 100%; padding: 15px;
+    background: var(--gold); color: var(--dark);
+    border: none; border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px; font-weight: 700;
+    cursor: pointer; margin-top: 6px;
+    transition: all 0.25s; position: relative;
+    overflow: hidden;
+  }
+  .btn-submit:hover { background: #dbb94e; transform: translateY(-2px); box-shadow: 0 12px 36px rgba(201,168,76,0.3); }
+  .btn-submit:active { transform: translateY(0); }
+  .btn-submit.loading { opacity: 0.7; pointer-events: none; }
+
+  /* privacy note */
+  .privacy { text-align: center; font-size: 12px; color: rgba(255,255,255,0.25); margin-top: 14px; }
+
+  /* ── SUCCESS STATE ── */
+  .success-crescent { font-size: 52px; margin-bottom: 16px; animation: float 4s ease-in-out infinite; text-align: center; }
+  .success-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 34px; font-weight: 900;
+    text-align: center; color: var(--gold);
+    line-height: 1.15; margin-bottom: 16px;
+  }
+  .success-message {
+    text-align: center; font-size: 15px;
+    color: var(--muted); line-height: 1.75;
+    margin-bottom: 20px; font-weight: 300;
+  }
+  .success-count {
+    font-size: 20px; font-weight: 700;
+    color: var(--success); text-align: center;
+    margin-bottom: 28px;
+  }
+  .success-count strong {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px; font-weight: 900;
+  }
+
+  .divider { width: 100%; height: 1px; background: rgba(255,255,255,0.08); margin: 20px 0; }
+
+  .hadith {
+    text-align: center; font-family: 'Playfair Display', serif;
+    font-style: italic; font-size: 14px;
+    color: rgba(255,255,255,0.5); line-height: 1.8;
+    padding: 0 10px;
+  }
+  .hadith cite { display: block; margin-top: 8px; color: var(--gold); font-style: normal; font-size: 13px; }
+
+  /* share */
+  .share-row {
+    display: flex; gap: 10px; margin-top: 28px; width: 100%;
+  }
+  .share-btn {
+    flex: 1; padding: 12px 10px;
+    border-radius: 11px; border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.04);
+    color: rgba(255,255,255,0.7); font-size: 13px; font-weight: 600;
+    cursor: pointer; font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .share-btn:hover { border-color: var(--teal); color: #fff; background: rgba(26,107,92,0.12); }
+
+  .back-link {
+    margin-top: 24px; font-size: 13px; color: var(--success);
+    cursor: pointer; background: none; border: none;
+    font-family: 'DM Sans', sans-serif; font-weight: 500;
+    transition: color 0.2s; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .back-link:hover { color: #fff; }
+
+  /* arabic footer */
+  .arabic-footer {
+    margin-top: 40px; text-align: center;
+    font-size: 16px; color: rgba(201,168,76,0.5);
+    letter-spacing: 2px;
+  }
+
+  /* ── SOCIAL PROOF STRIP ── */
+  .social-strip {
+    margin-top: 28px; width: 100%;
+    display: flex; justify-content: center; gap: 6px; flex-wrap: wrap;
+  }
+  .sp-pill {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 100px; padding: 6px 14px;
+    font-size: 12px; color: var(--muted);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .sp-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--success); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(32px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  @keyframes countUp {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  @keyframes successIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 560px) {
+    .card { padding: 40px 24px; border-radius: 22px; margin-top: 70px; }
+    .card-title { font-size: 28px; }
+    .field-row { grid-template-columns: 1fr; }
+    .share-row { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+<div class="bg-geo"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="logo">Ummah<span>Connect</span></div>
+  <div class="nav-badge">Coming Soon</div>
+</nav>
+
+<div class="page">
+
+  <div class="card" id="mainCard">
+
+    <!-- ── FORM VIEW ── -->
+    <div class="form-view" id="formView">
+
+      <div style="font-family:'Playfair Display',serif; font-size:28px; font-weight:700; color:var(--gold); text-align:center; margin-bottom:20px; letter-spacing:1px; direction:rtl;">السَّلَامُ عَلَيْكُمْ</div>
+
+      <h1 class="card-title">Be among the<br><span>founding members</span></h1>
+      <p class="card-sub">A career network built for Muslims in Nigeria — launching soon. Join the waitlist and be first in.</p>
+
+      <!-- counter -->
+      <div class="counter-bar">
+        <div class="counter-top">
+          <span class="counter-label">Founding members so far</span>
+          <span class="counter-num" id="countDisplay">0 <span>/ 40</span></span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="milestone-label" id="milestoneLabel"></div>
+      </div>
+
+      <!-- form -->
+      <form class="form" id="waitlistForm" onsubmit="handleSubmit(event)">
+        <div class="field-row">
+          <div class="field">
+            <label>First Name</label>
+            <input type="text" placeholder="Aisha" id="firstName" required>
+          </div>
+          <div class="field">
+            <label>Last Name</label>
+            <input type="text" placeholder="Bello" id="lastName" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Email Address</label>
+          <input type="email" placeholder="aisha@example.com" id="email" required>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>City</label>
+            <select id="city">
+              <option value="">Select city</option>
+              <option>Lagos</option>
+              <option>Abuja</option>
+              <option>Kano</option>
+              <option>Kaduna</option>
+              <option>Port Harcourt</option>
+              <option>Ibadan</option>
+              <option>Maiduguri</option>
+              <option>Sokoto</option>
+              <option>Zaria</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Industry</label>
+            <select id="industry">
+              <option value="">Select field</option>
+              <option>Tech & Software</option>
+              <option>Halal Finance</option>
+              <option>Healthcare</option>
+              <option>Creative Arts</option>
+              <option>Education</option>
+              <option>Law & Policy</option>
+              <option>Entrepreneurship</option>
+              <option>Architecture</option>
+              <option>Media & Journalism</option>
+              <option>NGO & Nonprofit</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">
+          Reserve My Spot →
+        </button>
+      </form>
+
+      <p class="privacy">No spam. No sharing. Ever. بإذن الله</p>
+
+      <!-- social proof -->
+      <div class="social-strip">
+        <div class="sp-pill"><span class="dot"></span>Lagos</div>
+        <div class="sp-pill"><span class="dot"></span>Abuja</div>
+        <div class="sp-pill"><span class="dot"></span>Kano</div>
+        <div class="sp-pill"><span class="dot"></span>+7 cities</div>
+      </div>
+
+    </div>
+
+    <!-- ── SUCCESS VIEW ── -->
+    <div class="success-view" id="successView">
+
+      <div style="font-size:22px; color:var(--gold); text-align:center; margin-bottom:16px; direction:rtl; letter-spacing:1px;">السَّلَامُ عَلَيْكُمْ</div>
+
+      <h2 class="success-title">JazakAllahu<br>Khayran!</h2>
+
+      <p class="success-message">
+        You're on the Ummah Connect waitlist.<br>
+        We'll notify you the moment we launch in Nigeria.
+      </p>
+
+      <div class="success-count">
+        You joined <strong id="successCount">0</strong> others<br>on the founding list.
+      </div>
+
+      <div class="divider"></div>
+
+      <p class="hadith">
+        "The best of people are those who are most beneficial to people."
+        <cite>— Prophet Muhammad ﷺ</cite>
+      </p>
+
+      <!-- share -->
+      <div class="share-row">
+        <button class="share-btn" onclick="shareWhatsApp()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp
+        </button>
+        <button class="share-btn" onclick="shareTwitter()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          Share
+        </button>
+        <button class="share-btn" onclick="copyLink()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          <span id="copyText">Copy Link</span>
+        </button>
+      </div>
+
+      <button class="back-link" onclick="showForm()">← Back to waitlist</button>
+
+    </div>
+
+  </div>
+
+  <div class="arabic-footer">بسم الله الرحمن الرحيم</div>
+
+</div>
+
+<script>
+  // ── STATE ──
+  let currentCount = 13; // starting mock count
+  const GOAL = 40;
+  let userSubmitted = false;
+
+  // ── ON LOAD ──
+  window.addEventListener('load', () => {
+    setTimeout(() => animateCount(currentCount), 400);
+  });
+
+  function animateCount(target) {
+    const el = document.getElementById('countDisplay');
+    const fill = document.getElementById('progressFill');
+    const milestone = document.getElementById('milestoneLabel');
+    let start = 0;
+    const duration = 1200;
+    const startTime = performance.now();
+
+    function update(now) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = Math.floor(eased * target);
+      el.innerHTML = `${current} <span>/ ${GOAL}</span>`;
+      const pct = (current / GOAL) * 100;
+      fill.style.width = pct + '%';
+
+      if (current >= 10) milestone.textContent = '🔥 25% claimed — spots going fast';
+      if (current >= 20) milestone.textContent = '⚡ Halfway there — 20 spots left';
+      if (current >= 32) milestone.textContent = '🚨 Almost full — only 8 spots remaining';
+
+      if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  }
+
+  // ── SUBMIT ──
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    btn.textContent = 'Joining...';
+    btn.classList.add('loading');
+
+    // simulate API call
+    setTimeout(() => {
+      currentCount += 1;
+      document.getElementById('successCount').textContent = currentCount;
+      showSuccess();
+    }, 1200);
+  }
+
+  function showSuccess() {
+    const formView = document.getElementById('formView');
+    const successView = document.getElementById('successView');
+
+    formView.style.animation = 'none';
+    formView.style.opacity = '0';
+    formView.style.transform = 'scale(0.96)';
+    formView.style.transition = 'all 0.3s ease';
+
+    setTimeout(() => {
+      formView.style.display = 'none';
+      successView.style.display = 'flex';
+      successView.style.animation = 'successIn 0.5s cubic-bezier(0.22,1,0.36,1) both';
+      animateSuccessCount();
+    }, 300);
+  }
+
+  function animateSuccessCount() {
+    const el = document.getElementById('successCount');
+    let start = currentCount - 1;
+    const target = currentCount;
+    const duration = 600;
+    const startTime = performance.now();
+
+    function update(now) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.floor(start + eased * (target - start));
+      if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  }
+
+  function showForm() {
+    const formView = document.getElementById('formView');
+    const successView = document.getElementById('successView');
+    successView.style.display = 'none';
+    formView.style.display = 'flex';
+    formView.style.opacity = '1';
+    formView.style.transform = 'none';
+    document.getElementById('submitBtn').textContent = 'Reserve My Spot →';
+    document.getElementById('submitBtn').classList.remove('loading');
+  }
+
+  // ── SHARE ──
+  function shareWhatsApp() {
+    const text = `I just joined the Ummah Connect waitlist — a career network built for Muslims in Nigeria 🌙\n\nOnly 40 founding spots. Join me: ${window.location.href}`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+  }
+
+  function shareTwitter() {
+    const text = `Just joined the @UmmahConnect waitlist — a career network built for Muslims in Nigeria 🌙\n\nOnly 40 founding spots. Find your people. Grow your career. Keep your faith.`;
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(window.location.href)}`, '_blank');
+  }
+
+  function copyLink() {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      const btn = document.getElementById('copyText');
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy Link', 2000);
+    });
+  }
+</script>
+
+</body>
+</html>

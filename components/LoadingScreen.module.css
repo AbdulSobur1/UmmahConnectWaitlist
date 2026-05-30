@@ -1,0 +1,110 @@
+.loading {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: var(--dark);
+  opacity: 1;
+  transition: opacity 400ms ease;
+}
+
+.exiting {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.bg,
+.geo {
+  position: fixed;
+  inset: 0;
+}
+
+.bg {
+  background:
+    radial-gradient(ellipse 60% 60% at 20% 20%, rgba(26,107,92,0.22) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 80% 80%, rgba(201,168,76,0.1) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 40% at 70% 20%, rgba(26,107,92,0.12) 0%, transparent 50%),
+    var(--dark);
+}
+
+.geo {
+  opacity: 0.025;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(255,255,255,1) 59px, rgba(255,255,255,1) 60px),
+    repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(255,255,255,1) 59px, rgba(255,255,255,1) 60px);
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: loadingIn 500ms ease both;
+}
+
+.greeting {
+  color: var(--gold);
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: clamp(28px, 6vw, 48px);
+  font-weight: 700;
+  letter-spacing: 2px;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.transliteration {
+  margin-top: 14px;
+  animation: delayedFade 500ms ease 300ms both;
+  color: rgba(255,255,255,0.45);
+  font-size: 14px;
+  font-weight: 300;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.dots {
+  display: flex;
+  gap: 8px;
+  margin-top: 22px;
+  animation: delayedFade 500ms ease 500ms both;
+}
+
+.dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--teal);
+  animation: dotPulse 1.2s ease-in-out infinite;
+}
+
+.dots span:nth-child(2) {
+  animation-delay: 400ms;
+}
+
+.dots span:nth-child(3) {
+  animation-delay: 800ms;
+}
+
+@keyframes loadingIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes delayedFade {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes dotPulse {
+  0%, 80%, 100% { opacity: 0.2; transform: scale(0.8); }
+  40% { opacity: 1; transform: scale(1); }
+}
+
+@media (max-width: 359px) {
+  .geo {
+    display: none;
+  }
+}
