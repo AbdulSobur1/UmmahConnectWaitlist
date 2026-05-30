@@ -2,11 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import { GOAL } from "@/lib/constants";
-import { buildShareText, buildTwitterText, type MemberData } from "@/lib/utils";
+import { buildShareText, buildTwitterText } from "@/lib/utils";
 import styles from "./Waitlist.module.css";
 
 type SuccessViewProps = {
-  member: MemberData;
+  message: string;
+  count: number;
   onBack: () => void;
 };
 
@@ -14,15 +15,15 @@ function easeOutCubic(value: number): number {
   return 1 - Math.pow(1 - value, 3);
 }
 
-export default function SuccessView({ member, onBack }: SuccessViewProps) {
-  const [displayCount, setDisplayCount] = useState(member.memberNumber - 1);
+export default function SuccessView({ message, count, onBack }: SuccessViewProps) {
+  const [displayCount, setDisplayCount] = useState(Math.max(count - 1, 0));
   const [copyText, setCopyText] = useState("Copy Link");
   const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
     const duration = 600;
-    const start = member.memberNumber - 1;
-    const target = member.memberNumber;
+    const start = Math.max(count - 1, 0);
+    const target = count;
     const startTime = performance.now();
 
     const update = (now: number) => {
@@ -40,7 +41,7 @@ export default function SuccessView({ member, onBack }: SuccessViewProps) {
         cancelAnimationFrame(rafRef.current);
       }
     };
-  }, [member.memberNumber]);
+  }, [count]);
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || (typeof window !== "undefined" ? window.location.href : "");
 
@@ -85,16 +86,10 @@ export default function SuccessView({ member, onBack }: SuccessViewProps) {
       </h2>
 
       <p className={styles.successMessage}>
-        You&apos;re on the Ummah Connect waitlist.
+        {message}
         <br />
         We&apos;ll notify you the moment we launch in Nigeria.
       </p>
-
-      <div className={styles.memberMeta}>
-        #{member.memberNumber} - {member.firstName} {member.lastName} - {member.industry}, {member.city}
-        <br />
-        Ref: {member.refCode}
-      </div>
 
       <div className={styles.successCount}>
         You joined <strong>{displayCount}</strong> others

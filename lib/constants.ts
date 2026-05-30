@@ -1,5 +1,4 @@
 export const GOAL = Number(process.env.NEXT_PUBLIC_WAITLIST_GOAL ?? 40);
-export const TAKEN_SEATS = Number(process.env.NEXT_PUBLIC_INITIAL_COUNT ?? 13);
 
 export const COLORS = {
   teal: "#1A6B5C",

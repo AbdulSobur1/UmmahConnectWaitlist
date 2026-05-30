@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { CITIES, GOAL, INDUSTRIES, MILESTONE_LABELS, SOCIAL_CITIES } from "@/lib/constants";
-import { generateRefCode, isValidEmail, type MemberData } from "@/lib/utils";
+import { isValidEmail } from "@/lib/utils";
 import ProgressBar from "./ProgressBar";
 import styles from "./Waitlist.module.css";
 
-type FormValues = {
+export type WaitlistFormValues = {
   firstName: string;
   lastName: string;
   email: string;
@@ -14,16 +14,18 @@ type FormValues = {
   industry: string;
 };
 
-type FormErrors = Partial<Record<keyof FormValues, string>>;
+type FormErrors = Partial<Record<keyof WaitlistFormValues, string>>;
 
 type WaitlistFormProps = {
   currentCount: number;
   isLeaving: boolean;
-  onSuccess: (member: MemberData) => void;
+  isLoading: boolean;
+  errorMessage: string;
+  onSubmit: (values: WaitlistFormValues) => Promise<boolean>;
   registerFirstField: (field: HTMLInputElement | null) => void;
 };
 
-const initialValues: FormValues = {
+const initialValues: WaitlistFormValues = {
   firstName: "",
   lastName: "",
   email: "",
@@ -31,7 +33,7 @@ const initialValues: FormValues = {
   industry: "",
 };
 
-function validate(values: FormValues): FormErrors {
+function validate(values: WaitlistFormValues): FormErrors {
   const errors: FormErrors = {};
 
   if (!values.firstName.trim()) errors.firstName = "First name is required.";
@@ -50,28 +52,20 @@ function validate(values: FormValues): FormErrors {
 export default function WaitlistForm({
   currentCount,
   isLeaving,
-  onSuccess,
+  isLoading,
+  errorMessage,
+  onSubmit,
   registerFirstField,
 }: WaitlistFormProps) {
-  const [values, setValues] = useState<FormValues>(initialValues);
+  const [values, setValues] = useState<WaitlistFormValues>(initialValues);
   const [errors, setErrors] = useState<FormErrors>({});
-  const [isLoading, setIsLoading] = useState(false);
-  const submitTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useEffect(() => {
-    return () => {
-      if (submitTimer.current) {
-        clearTimeout(submitTimer.current);
-      }
-    };
-  }, []);
-
-  function updateField(field: keyof FormValues, value: string) {
+  function updateField(field: keyof WaitlistFormValues, value: string) {
     setValues((current) => ({ ...current, [field]: value }));
     setErrors((current) => ({ ...current, [field]: undefined }));
   }
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const nextErrors = validate(values);
     setErrors(nextErrors);
@@ -80,20 +74,13 @@ export default function WaitlistForm({
       return;
     }
 
-    setIsLoading(true);
-    submitTimer.current = setTimeout(() => {
-      const memberNumber = currentCount + 1;
-      onSuccess({
-        ...values,
-        firstName: values.firstName.trim(),
-        lastName: values.lastName.trim(),
-        email: values.email.trim(),
-        memberNumber,
-        refCode: generateRefCode(values.firstName, values.lastName),
-      });
-      setIsLoading(false);
-    }, 1200);
+    const didSubmit = await onSubmit(values);
+    if (didSubmit) {
+      setValues(initialValues);
+    }
   }
+
+  const spotsLeft = GOAL - currentCount;
 
   return (
     <div className={`${styles.formView} ${isLeaving ? styles.formLeaving : ""}`}>
@@ -112,6 +99,9 @@ export default function WaitlistForm({
       </p>
 
       <ProgressBar current={currentCount} goal={GOAL} milestoneLabels={MILESTONE_LABELS} />
+      {spotsLeft <= 10 && spotsLeft > 0 ? (
+        <p className={styles.spotsWarning}>Only {spotsLeft} spots remaining</p>
+      ) : null}
 
       <form className={styles.form} onSubmit={handleSubmit} aria-label="Join the Ummah Connect waitlist" noValidate>
         <div className={styles.fieldRow}>
@@ -123,6 +113,7 @@ export default function WaitlistForm({
               name="firstName"
               type="text"
               placeholder="Aisha"
+              required
               value={values.firstName}
               onChange={(event) => updateField("firstName", event.target.value)}
               aria-invalid={Boolean(errors.firstName)}
@@ -137,6 +128,7 @@ export default function WaitlistForm({
               name="lastName"
               type="text"
               placeholder="Bello"
+              required
               value={values.lastName}
               onChange={(event) => updateField("lastName", event.target.value)}
               aria-invalid={Boolean(errors.lastName)}
@@ -153,6 +145,7 @@ export default function WaitlistForm({
             name="email"
             type="email"
             placeholder="aisha@example.com"
+            required
             value={values.email}
             onChange={(event) => updateField("email", event.target.value)}
             aria-invalid={Boolean(errors.email)}
@@ -167,6 +160,7 @@ export default function WaitlistForm({
             <select
               id="city"
               name="city"
+              required
               value={values.city}
               onChange={(event) => updateField("city", event.target.value)}
               aria-invalid={Boolean(errors.city)}
@@ -184,6 +178,7 @@ export default function WaitlistForm({
             <select
               id="industry"
               name="industry"
+              required
               value={values.industry}
               onChange={(event) => updateField("industry", event.target.value)}
               aria-invalid={Boolean(errors.industry)}
@@ -198,8 +193,10 @@ export default function WaitlistForm({
           </div>
         </div>
 
+        {errorMessage ? <p className={styles.formError} role="alert">{errorMessage}</p> : null}
+
         <button type="submit" className={`${styles.btnSubmit} ${isLoading ? styles.loading : ""}`} disabled={isLoading}>
-          {isLoading ? "Joining..." : "Reserve My Spot →"}
+          {isLoading ? "Reserving your spot..." : "Reserve My Spot →"}
         </button>
       </form>
 
